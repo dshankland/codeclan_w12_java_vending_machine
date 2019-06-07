@@ -49,16 +49,40 @@ public class VendingMachineTest {
 
     @Test
     public void canAddCoin() {
-        vendingMachine.addCoin(onecoin);
-        assertEquals(1, vendingMachine.getEnteredCoinsTotal());
+        vendingMachine.addCoin(twentycoin);
+        assertEquals(20, vendingMachine.getEnteredCoinsTotal());
     }
 
     @Test
     public void canAddCoins() {
-        vendingMachine.addCoin(onecoin);
         vendingMachine.addCoin(fiftycoin);
         vendingMachine.addCoin(tencoin);
-        assertEquals(61, vendingMachine.getEnteredCoinsTotal());
+        assertEquals(60, vendingMachine.getEnteredCoinsTotal());
     }
 
+    @Test
+    public void isCoinValid() {
+        assertEquals(false, vendingMachine.isCoinValid(onecoin));
+        assertEquals(false, vendingMachine.isCoinValid(twocoin));
+        assertEquals(true, vendingMachine.isCoinValid(fivecoin));
+    }
+
+    @Test
+    public void ifCoinInvalidAddToReturn() {
+        vendingMachine.addCoin(onecoin);
+        vendingMachine.addCoin(onecoin);
+        vendingMachine.addCoin(twocoin);
+        vendingMachine.addCoin(twocoin);
+        assertEquals(0, vendingMachine.getEnteredCoinsTotal());
+    }
+
+    @Test
+    public void ifCoinValidAddToEnteredCoins() {
+        vendingMachine.addCoin(fivecoin);
+        vendingMachine.addCoin(tencoin);
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(fiftycoin);
+        vendingMachine.addCoin(poundcoin);
+        assertEquals(185, vendingMachine.getEnteredCoinsTotal());
+    }
 }

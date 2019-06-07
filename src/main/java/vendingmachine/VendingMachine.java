@@ -20,7 +20,12 @@ public class VendingMachine {
 
 
     public void addCoin(Coin coin) {
-        this.enteredCoins.add(coin);
+        if (this.isCoinValid(coin)) {
+            this.enteredCoins.add(coin);
+        }
+        else {
+            this.coinReturn.addCoin(coin);
+        }
     }
 
 
@@ -32,4 +37,10 @@ public class VendingMachine {
         return total;
     }
 
+    public boolean isCoinValid(Coin coin) {
+        if (coin.getValue() >= 5) {
+            return true;
+        }
+        return false;
+    }
 }
