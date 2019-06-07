@@ -37,6 +37,9 @@ public class VendingMachineTest {
         sweet = new Sweet("Curly Wurly", "Cadbury");
         crisps = new Crisps("Scampi Fries", "Smiths");
         drink = new Drink("Irn Bru", "Barr");
+        c1drawer.addProduct(crisps);
+        d1drawer.addProduct(drink);
+        s1drawer.addProduct(sweet);
         onecoin = new Coin(CoinType.ONE);
         twocoin = new Coin(CoinType.TWO);
         fivecoin = new Coin(CoinType.FIVE);
@@ -45,6 +48,9 @@ public class VendingMachineTest {
         fiftycoin = new Coin(CoinType.FIFTY);
         poundcoin = new Coin(CoinType.POUND);
         vendingMachine = new VendingMachine();
+        vendingMachine.addDrawer(c1drawer);
+        vendingMachine.addDrawer(d1drawer);
+        vendingMachine.addDrawer(s1drawer);
     }
 
     @Test
@@ -84,5 +90,10 @@ public class VendingMachineTest {
         vendingMachine.addCoin(fiftycoin);
         vendingMachine.addCoin(poundcoin);
         assertEquals(185, vendingMachine.getEnteredCoinsTotal());
+    }
+
+    @Test
+    public void canVend() {
+        assertEquals(crisps, vendingMachine.vend(Code.C1));
     }
 }

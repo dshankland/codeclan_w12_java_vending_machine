@@ -2,7 +2,10 @@ package vendingmachine;
 
 import vendingmachine.coin.Coin;
 import vendingmachine.coin.CoinReturn;
+import vendingmachine.drawer.Code;
 import vendingmachine.drawer.Drawer;
+import vendingmachine.product.Crisps;
+import vendingmachine.product.Product;
 
 import java.util.ArrayList;
 
@@ -18,6 +21,9 @@ public class VendingMachine {
         coinReturn = new CoinReturn();
     }
 
+    public void addDrawer(Drawer drawer) {
+        this.drawers.add(drawer);
+    }
 
     public void addCoin(Coin coin) {
         if (this.isCoinValid(coin)) {
@@ -27,7 +33,6 @@ public class VendingMachine {
             this.coinReturn.addCoin(coin);
         }
     }
-
 
     public int getEnteredCoinsTotal() {
         int total = 0;
@@ -42,5 +47,14 @@ public class VendingMachine {
             return true;
         }
         return false;
+    }
+
+    public Product vend(Code code) {
+        for (Drawer drawer : drawers) {
+            if (drawer.getCode() == code) {
+                return drawer.returnProduct();
+            }
+        }
+        return null;
     }
 }
