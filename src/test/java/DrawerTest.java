@@ -12,9 +12,9 @@ import static org.junit.Assert.assertEquals;
 public class DrawerTest {
 
     private Drawer drawer;
-    Crisps crisps;
-    Sweet sweet;
-    Drink drink;
+    private Crisps crisps;
+    private Sweet sweet;
+    private Drink drink;
 
     @Before
     public void setUp() {
