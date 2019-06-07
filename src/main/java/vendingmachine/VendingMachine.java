@@ -57,4 +57,26 @@ public class VendingMachine {
         }
         return null;
     }
+
+    public int getVendPrice(Code code) {
+        for (Drawer drawer : drawers) {
+            if (drawer.getCode() == code) {
+                return drawer.getPrice();
+            }
+        }
+        return 999999999;
+    }
+
+    public boolean sufficientFunds(int vendPrice) {
+        return this.getEnteredCoinsTotal() >= vendPrice;
+    }
+
+    public Product buy(Code code) {
+        int priceToBuy = this.getVendPrice(code);
+        if (this.sufficientFunds(priceToBuy)) {
+            this.enteredCoins.clear();
+            return this.vend(code);
+        }
+        return null;
+    }
 }

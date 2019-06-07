@@ -8,6 +8,7 @@ import vendingmachine.drawer.Code;
 import vendingmachine.drawer.Drawer;
 import vendingmachine.product.Crisps;
 import vendingmachine.product.Drink;
+import vendingmachine.product.Product;
 import vendingmachine.product.Sweet;
 
 import static org.junit.Assert.assertEquals;
@@ -28,12 +29,13 @@ public class VendingMachineTest {
     private Coin twentycoin;
     private Coin fiftycoin;
     private Coin poundcoin;
+    private Product vendedProduct;
 
     @Before
     public void setUp() {
         c1drawer = new Drawer(Code.C1, 50);
-        d1drawer = new Drawer(Code.D1, 50);
-        s1drawer = new Drawer(Code.S1, 50);
+        d1drawer = new Drawer(Code.D1, 100);
+        s1drawer = new Drawer(Code.S1, 65);
         sweet = new Sweet("Curly Wurly", "Cadbury");
         crisps = new Crisps("Scampi Fries", "Smiths");
         drink = new Drink("Irn Bru", "Barr");
@@ -95,5 +97,14 @@ public class VendingMachineTest {
     @Test
     public void canVend() {
         assertEquals(crisps, vendingMachine.vend(Code.C1));
+    }
+
+    @Test
+    public void canBuyProduct() {
+        vendingMachine.addCoin(tencoin);
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(twentycoin);
+        vendedProduct = vendingMachine.buy(Code.C1);
+        assertEquals(crisps, vendedProduct);
     }
 }
