@@ -2,10 +2,8 @@ package vendingmachine;
 
 import vendingmachine.coin.Coin;
 import vendingmachine.coin.CoinReturn;
-import vendingmachine.coin.CoinType;
 import vendingmachine.drawer.Code;
 import vendingmachine.drawer.Drawer;
-import vendingmachine.product.Crisps;
 import vendingmachine.product.Product;
 
 import java.util.ArrayList;
@@ -65,6 +63,7 @@ public class VendingMachine {
                 return drawer.getPrice();
             }
         }
+        // Do'n like this return, but couldn't think of anything better!
         return 999999999;
     }
 
@@ -76,7 +75,8 @@ public class VendingMachine {
         int change;
         int priceToBuy = this.getVendPrice(code);
         if (this.sufficientFunds(priceToBuy)) {
-            this.enteredCoins.clear();
+//            this.enteredCoins.clear();
+            this.calculateAndDeliverChange(priceToBuy);
             return this.vend(code);
         }
         return null;
@@ -103,15 +103,58 @@ public class VendingMachine {
     }
 
     public void calculateAndDeliverChange(int vendPrice) {
-        // we assume the vendPrice has already been compared to the enteredCoins value
+        // we assume the vendPrice has already been compared to the enteredCoins value in the buy method
         int changeTotal = this.getEnteredCoinsTotal() - vendPrice;
-        this.bubbleSortEnteredCoins();
-
-        // loop round the entered coins
-        for (Coin coin : enteredCoins) {
-            System.out.println(coin.getValue());
+        int runningTotal = 0;
+        if (changeTotal == 0) {
+            returnCoins();
         }
+        else {
+            ArrayList<Integer> indexOfCoins = new ArrayList<Integer>();
+            this.bubbleSortEnteredCoins();
+            // loop round the entered coins
+            int index = 0;
+            for (Coin coin : this.enteredCoins) {
+                // if the current coin value is less than the vend price add it to an ArrayList of coins to be removed
+                // from the enteredCoins ArrayList and remove the coin value from the vend price
+                if (coin.getValue() < vendPrice) {
+                    indexOfCoins.add(index);
+                    vendPrice -= coin.getValue();
+                }
+                // the coin value is greater than or equal to the vend price
+                else {
+                    // if it's equal to the value, then we are laughing, we have the exact amount and the change
+                  if (coin.getValue() == vendPrice) {
+                      indexOfCoins.add(index);
+                      vendPrice -= coin.getValue();
+                      break;
+                  }
+                  // this is where my logic falls down. This should do something clever depending on what is left
+                  // in the enteredCoins ArrayList
+                  else {
+                      // if we're at the last of the enteredCoins ArrayList we need to add this coin
+                      // meaning no change.
+                      if (index == this.enteredCoins.size() - 1) {
+                          indexOfCoins.add(index);
+                          vendPrice -= coin.getValue();
+                          break;
+                      }
+                      // this is where we should try and calculate what's left in the enteredCoins from this index on
+                      // and figure out what to do based on that value
+                      else {
 
+                      }
+                  }
+                }
+                index++;
+            }
+            // loop around the ArrayList of indexes of coins to remove from enteredCoins. We go backwards
+            // so we preserve the indexes of the ArrayList. Hacky McHackhack.
+            for (int i = indexOfCoins.size() - 1; i >= 0; i--) {
+                this.enteredCoins.remove(indexOfCoins.get(i).intValue());
+            }
+            returnCoins();
+        }
     }
 
     public void bubbleSortEnteredCoins() {

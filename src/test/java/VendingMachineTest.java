@@ -2,7 +2,6 @@ import org.junit.Before;
 import org.junit.Test;
 import vendingmachine.VendingMachine;
 import vendingmachine.coin.Coin;
-import vendingmachine.coin.CoinReturn;
 import vendingmachine.coin.CoinType;
 import vendingmachine.drawer.Code;
 import vendingmachine.drawer.Drawer;
@@ -146,10 +145,49 @@ public class VendingMachineTest {
         vendingMachine.addCoin(fiftycoin);
         vendingMachine.addCoin(twentycoin);
         vendedProduct = vendingMachine.buy(Code.C1);
-        vendingMachine.calculateAndDeliverChange(vendingMachine.getVendPrice(Code.C1));
         assertEquals(crisps, vendedProduct);
         assertEquals(0, vendingMachine.getEnteredCoinsTotal());
-        assertEquals(20, vendingMachine.getCoinReturnTotal());
+        assertEquals(50, vendingMachine.getCoinReturnTotal());
     }
+
+    @Test
+    public void willFailToReturnExactChange() {
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(twentycoin);
+        vendedProduct = vendingMachine.buy(Code.C1);
+        assertEquals(crisps, vendedProduct);
+        assertEquals(0, vendingMachine.getEnteredCoinsTotal());
+        assertEquals(0, vendingMachine.getCoinReturnTotal());
+    }
+
+    @Test
+    public void testBuyMethodWithChangeThatWillConfuseIt() {
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(twentycoin);
+        vendedProduct = vendingMachine.buy(Code.C1);
+        assertEquals(crisps, vendedProduct);
+        assertEquals(0, vendingMachine.getEnteredCoinsTotal());
+        assertEquals(0, vendingMachine.getCoinReturnTotal());
+    }
+
+    @Test
+    public void testBuyMethodOnCurlyWurlyWithChangeThatWillConfuseIt() {
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(tencoin);
+        vendingMachine.addCoin(tencoin);
+        vendingMachine.addCoin(tencoin);
+        vendingMachine.addCoin(fivecoin);
+        vendingMachine.addCoin(fivecoin);
+        vendedProduct = vendingMachine.buy(Code.S1);
+        assertEquals(sweet, vendedProduct);
+        assertEquals(0, vendingMachine.getEnteredCoinsTotal());
+        assertEquals(35, vendingMachine.getCoinReturnTotal());
+    }
+
+
 }
 
