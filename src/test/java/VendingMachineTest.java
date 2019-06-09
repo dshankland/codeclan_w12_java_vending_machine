@@ -106,5 +106,50 @@ public class VendingMachineTest {
         vendingMachine.addCoin(twentycoin);
         vendedProduct = vendingMachine.buy(Code.C1);
         assertEquals(crisps, vendedProduct);
+        assertEquals(0, vendingMachine.getEnteredCoinsTotal());
+    }
+
+    @Test
+    public void cannotBuyProduct() {
+        vendingMachine.addCoin(tencoin);
+        vendedProduct = vendingMachine.buy(Code.C1);
+        assertEquals(null, vendedProduct);
+        assertEquals(10, vendingMachine.getEnteredCoinsTotal());
+    }
+
+    @Test
+    public void canReturnCoins() {
+        vendingMachine.addCoin(tencoin);
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.returnCoins();
+        assertEquals(0, vendingMachine.getEnteredCoinsTotal());
+        assertEquals(50, vendingMachine.getCoinReturnTotal());
+    }
+
+    @Test
+    public void enteredCoinsContainsSpecificCoin() {
+        vendingMachine.addCoin(tencoin);
+        assertEquals(true, vendingMachine.doesEnteredCoinsContainCoin(10));
+    }
+
+    @Test
+    public void enteredCoinsDoesNotContainSpecificCoin() {
+        vendingMachine.addCoin(tencoin);
+        assertEquals(false, vendingMachine.doesEnteredCoinsContainCoin(5));
+    }
+
+    @Test
+    public void willReturnChange() {
+        vendingMachine.addCoin(tencoin);
+        vendingMachine.addCoin(twentycoin);
+        vendingMachine.addCoin(fiftycoin);
+        vendingMachine.addCoin(twentycoin);
+        vendedProduct = vendingMachine.buy(Code.C1);
+        vendingMachine.calculateAndDeliverChange(vendingMachine.getVendPrice(Code.C1));
+        assertEquals(crisps, vendedProduct);
+        assertEquals(0, vendingMachine.getEnteredCoinsTotal());
+        assertEquals(20, vendingMachine.getCoinReturnTotal());
     }
 }
+

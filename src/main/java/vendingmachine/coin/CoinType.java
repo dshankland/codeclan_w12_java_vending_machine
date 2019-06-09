@@ -1,5 +1,8 @@
 package vendingmachine.coin;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 public enum CoinType {
 
     ONE(1),
@@ -19,5 +22,6 @@ public enum CoinType {
     public int getValueFromEnum() {
         return this.value;
     }
+
 }
 

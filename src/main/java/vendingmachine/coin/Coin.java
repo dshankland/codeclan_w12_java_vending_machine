@@ -10,4 +10,14 @@ public class Coin {
     public int getValue() {
         return coin.getValueFromEnum();
     }
+
+    public static boolean isItACoin(int value) {
+        for (CoinType coin : CoinType.values()) {
+            if (value == coin.getValueFromEnum()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

@@ -56,4 +56,15 @@ public class CoinTest {
     public void getPoundValue() {
         assertEquals(100, poundcoin.getValue());
     }
+
+    @Test
+    public void itsACoin() {
+        assertEquals(true, Coin.isItACoin(10));
+    }
+
+    @Test
+    public void itsNotACoin() {
+        assertEquals(false, Coin.isItACoin(25));
+    }
+
 }

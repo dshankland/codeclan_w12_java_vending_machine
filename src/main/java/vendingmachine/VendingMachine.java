@@ -2,6 +2,7 @@ package vendingmachine;
 
 import vendingmachine.coin.Coin;
 import vendingmachine.coin.CoinReturn;
+import vendingmachine.coin.CoinType;
 import vendingmachine.drawer.Code;
 import vendingmachine.drawer.Drawer;
 import vendingmachine.product.Crisps;
@@ -72,6 +73,7 @@ public class VendingMachine {
     }
 
     public Product buy(Code code) {
+        int change;
         int priceToBuy = this.getVendPrice(code);
         if (this.sufficientFunds(priceToBuy)) {
             this.enteredCoins.clear();
@@ -79,4 +81,50 @@ public class VendingMachine {
         }
         return null;
     }
+
+    public void returnCoins() {
+        for (Coin coin : this.enteredCoins) {
+            this.coinReturn.addCoin(coin);
+        }
+        this.enteredCoins.clear();
+    }
+
+    public int getCoinReturnTotal() {
+        return coinReturn.getTotal();
+    }
+
+    public boolean doesEnteredCoinsContainCoin(int coinValue) {
+        for (Coin coin : this.enteredCoins) {
+            if (coin.getValue() == coinValue) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void calculateAndDeliverChange(int vendPrice) {
+        // we assume the vendPrice has already been compared to the enteredCoins value
+        int changeTotal = this.getEnteredCoinsTotal() - vendPrice;
+        this.bubbleSortEnteredCoins();
+
+        // loop round the entered coins
+        for (Coin coin : enteredCoins) {
+            System.out.println(coin.getValue());
+        }
+
+    }
+
+    public void bubbleSortEnteredCoins() {
+        for (int outerIndex = 0; outerIndex < this.enteredCoins.size(); outerIndex++) {
+            for (int innerIndex = 0; innerIndex < this.enteredCoins.size() - outerIndex - 1; innerIndex++) {
+                if (this.enteredCoins.get(innerIndex).getValue() < this.enteredCoins.get(innerIndex + 1).getValue() ) {
+                    Coin temp = this.enteredCoins.get(innerIndex);
+                    this.enteredCoins.set(innerIndex, this.enteredCoins.get(innerIndex + 1));
+                    this.enteredCoins.set(innerIndex + 1, temp);
+                }
+            }
+        }
+    }
+
+
 }
